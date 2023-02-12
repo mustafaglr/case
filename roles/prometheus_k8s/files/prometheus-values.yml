@@ -1,0 +1,116 @@
+
+
+prometheus:
+  ingress:
+    ingressClassName: nginx
+    enabled: true
+    hosts:
+      - prometheus.kubernetes.local
+
+  service:
+    annotations:
+      consul.hashicorp.com/connect-inject: "true"
+      consul.hashicorp.com/transparent-proxy: "true"
+
+  annotations:
+    consul.hashicorp.com/kubernetes-service: "prom-kube-prometheus-stack-prometheus"
+    consul.hashicorp.com/connect-inject: "true"
+    consul.hashicorp.com/transparent-proxy: "true"
+
+  prometheusSpec:
+    image:
+      tag: v2.22.1
+    nodeSelector:
+      prometheus: "true"
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: prometheus
+              operator: In
+              values:
+              - "true"
+          
+    
+    
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1000Mi
+      requests:
+        cpu: 500m
+        memory: 500Mi
+
+
+    ## How long to retain metrics
+    ##
+    retention: 80d
+
+
+prometheusOperator:
+  tls:
+    enabled: false
+  admissionWebhooks:
+    enabled: false
+  # podAnnotations:
+  #   consul.hashicorp.com/transparent-proxy: "true"
+  #   consul.hashicorp.com/connect-inject: 'true'
+
+
+alertmanager:
+  ingress:
+    ingressClassName: nginx
+    enabled: false
+    hosts:
+      - alertmanager.kubernetes.local
+
+grafana:
+  enabled: false
+
+kubeProxy:
+  enabled: false
+
+kubeDns:
+  enabled: true
+
+coreDns:
+  enabled: false
+
+kubeEtcd:
+  enabled: false
+
+  serviceMonitor:
+    scheme: http
+
+  service:
+    port: 2379
+    targetPort: 2379
+    selector:
+      k8s-app: etcd-manager-main
+
+kubeScheduler:
+  enabled: true
+
+  service:
+    port: 10251
+    targetPort: 10251
+    selector:
+      k8s-app: kube-scheduler
+
+kubeControllerManager:
+  enabled: true
+
+  service:
+    port: 10252
+    targetPort: 10252
+    selector:
+      k8s-app: kube-controller-manager
+
+kubeApiServer:
+  enabled: false
+
+kubelet:
+  enabled: true
+  serviceMonitor:
+    https: false

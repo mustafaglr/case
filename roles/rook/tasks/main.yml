@@ -1,0 +1,29 @@
+- name: crds
+  kubernetes.core.k8s:
+    state: present
+    src: https://raw.githubusercontent.com/rook/rook/master/deploy/examples/crds.yaml
+
+- name: common
+  kubernetes.core.k8s:
+    state: present
+    src: https://raw.githubusercontent.com/rook/rook/master/deploy/examples/common.yaml
+
+- name: operator
+  kubernetes.core.k8s:
+    state: present
+    src: https://raw.githubusercontent.com/rook/rook/master/deploy/examples/operator.yaml
+    
+- name: cluster
+  kubernetes.core.k8s:
+    state: present
+    src: https://raw.githubusercontent.com/rook/rook/master/deploy/examples/cluster.yaml
+
+- name: cluster
+  kubernetes.core.k8s:
+    state: present
+    src: https://raw.githubusercontent.com/rook/rook/master/deploy/examples/cluster-test.yaml
+
+- name: storageClass
+  kubernetes.core.k8s:
+    state: present
+    src: storageclass.yaml

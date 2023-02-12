@@ -1,0 +1,25 @@
+- name: Create a k8s env namespace
+  k8s:
+    name: "sonarqube"
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Render k8s sonarqube values template
+  template:
+    src: sonarqube-values.yml.j2
+    dest: sonarqube-values.yml
+
+- name: Helm repo add
+  command: helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
+
+- name: Helm repo update
+  command: helm repo update
+
+- name: Init sonarqube
+  command: > 
+    helm upgrade -i --history-max=1 \
+    sonarqube \
+    --namespace sonarqube \
+    -f sonarqube-values.yml  \
+    sonarqube/sonarqube

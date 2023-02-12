@@ -1,0 +1,16 @@
+- name: Create a k8s env namespace
+  k8s:
+    name: "nginx-ingress"
+    api_version: v1
+    kind: Namespace
+    state: present
+
+
+- name: Install ingress
+  command: > 
+    helm upgrade -i --history-max=1 \
+    nginx-ingress \
+    --namespace nginx-ingress \
+    -f ingress-values.yaml \
+    roles/ingress/templates/helm-chart
+

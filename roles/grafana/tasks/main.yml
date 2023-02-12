@@ -1,0 +1,28 @@
+- name: Copy the grafana values file based on the deployment
+  copy:
+    src: grafana-values.yml
+    dest: grafana-values.yml
+
+
+- name: Create a k8s env namespace
+  k8s:
+    name: "grafana"
+    api_version: v1
+    kind: Namespace
+    state: present
+
+
+- name: Helm repo add
+  command: helm repo add grafana https://grafana.github.io/helm-charts
+
+- name: Helm repo update
+  command: helm repo update
+
+- name: Init Grafana
+  command: > 
+    helm upgrade -i --history-max=1 \
+    grafana \
+    --namespace grafana \
+    --version 6.26.2 \
+    -f grafana-values.yml \
+    grafana/grafana
