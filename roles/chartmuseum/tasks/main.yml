@@ -1,0 +1,25 @@
+- name: Create a k8s env namespace
+  k8s:
+    name: "chartmuseum"
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Render k8s chartmuseum values template
+  template:
+    src: chartmuseum-values.yml.j2
+    dest: chartmuseum-values.yml
+
+- name: Helm repo add
+  command: helm repo add chartmuseum https://chartmuseum.github.io/charts
+
+- name: Helm repo update
+  command: helm repo update
+
+- name: Init chartmuseum
+  command: > 
+    helm upgrade -i --history-max=1 \
+    chartmuseum \
+    --namespace chartmuseum \
+    -f chartmuseum-values.yml  \
+    chartmuseum/chartmuseum
