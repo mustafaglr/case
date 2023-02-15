@@ -10,6 +10,12 @@
     src: jenkins-values.yml.j2
     dest: jenkins-values.yml
 
+- name: Apply pvc
+  kubernetes.core.k8s:
+    state: present
+    src: jenkins-pv.yml
+
+
 - name: Helm repo add
   command: helm repo add jenkins https://charts.jenkins.io
 

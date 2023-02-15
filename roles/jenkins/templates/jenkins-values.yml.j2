@@ -1,2 +1,11 @@
 persistence:
-  storageClass: rook-ceph-block2
+  storageClass: nfs-client
+  size: "5Gi"
+
+controller:
+  adminPassword: "admin"
+  ingress:
+    enabled: true
+    hostName: jenkins.kubernetes.local
+  nodeSelector:
+    kubernetes.io/hostname: "k8s-3"

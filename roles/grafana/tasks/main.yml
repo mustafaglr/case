@@ -19,10 +19,10 @@
   command: helm repo update
 
 - name: Init Grafana
-  command: > 
+  command: >
     helm upgrade -i --history-max=1 \
     grafana \
     --namespace grafana \
-    --version 6.26.2 \
+    --version 6.50.7 \
     -f grafana-values.yml \
     grafana/grafana

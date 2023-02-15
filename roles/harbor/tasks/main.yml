@@ -17,7 +17,7 @@
   command: helm repo update
 
 - name: Init harbor
-  command: > 
+  command: >
     helm upgrade -i --history-max=1 \
     harbor \
     --namespace harbor \

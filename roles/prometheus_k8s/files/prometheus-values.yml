@@ -7,16 +7,6 @@ prometheus:
     hosts:
       - prometheus.kubernetes.local
 
-  service:
-    annotations:
-      consul.hashicorp.com/connect-inject: "true"
-      consul.hashicorp.com/transparent-proxy: "true"
-
-  annotations:
-    consul.hashicorp.com/kubernetes-service: "prom-kube-prometheus-stack-prometheus"
-    consul.hashicorp.com/connect-inject: "true"
-    consul.hashicorp.com/transparent-proxy: "true"
-
   prometheusSpec:
     image:
       tag: v2.22.1
@@ -31,24 +21,26 @@ prometheus:
               operator: In
               values:
               - "true"
-          
-    
-    
+
+
+
     resources:
       limits:
         cpu: 1000m
         memory: 1000Mi
       requests:
-        cpu: 500m
-        memory: 500Mi
+        cpu: 200m
+        memory: 200Mi
 
 
     ## How long to retain metrics
     ##
-    retention: 80d
+    retention: 1d
 
 
 prometheusOperator:
+  nodeSelector:
+    kubernetes.io/hostname: k8s-2
   tls:
     enabled: false
   admissionWebhooks:

@@ -72,9 +72,6 @@ livenessProbe:
 # schedulerName: "default-scheduler"
 
 image:
-  repository: grafana/grafana
-  tag: 8.4.6
-  sha: ""
   pullPolicy: IfNotPresent
 
   ## Optionally specify an array of imagePullSecrets.
@@ -86,8 +83,6 @@ image:
 
 testFramework:
   enabled: true
-  image: "bats/bats"
-  tag: "v1.4.1"
   imagePullPolicy: IfNotPresent
   securityContext: {}
 
@@ -119,9 +114,6 @@ extraLabels: {}
 # priorityClassName:
 
 downloadDashboardsImage:
-  repository: curlimages/curl
-  tag: 7.73.0
-  sha: ""
   pullPolicy: IfNotPresent
 
 downloadDashboards:
@@ -175,10 +167,7 @@ extraExposePorts: []
  #   type: ClusterIP
 
 # overrides pod.spec.hostAliases in the grafana deployment's pods
-hostAliases: 
-  - ip: "8.208.79.7"
-    hostnames:
-      - "prometheus.kubernetes.local"
+#hostAliases: {}
 
 ingress:
   enabled: true
@@ -229,7 +218,7 @@ resources: {}
 ## Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 #
-nodeSelector: 
+nodeSelector:
   prometheus: "true"
 
 ## Tolerations for pod assignment
@@ -310,9 +299,6 @@ initChownData:
   ## initChownData container image
   ##
   image:
-    repository: busybox
-    tag: "1.31.1"
-    sha: ""
     pullPolicy: IfNotPresent
 
   ## initChownData resource requests and limits
@@ -468,13 +454,13 @@ plugins: []
 ## Configure grafana datasources
 ## ref: http://docs.grafana.org/administration/provisioning/#datasources
 ##
-datasources: 
+datasources:
  datasources.yaml:
    apiVersion: 1
    datasources:
    - name: Prometheus
      type: prometheus
-     url: http://prometheus.kubernetes.local
+     url: http://prom-kube-prometheus-stack-prometheus.prometheus.svc.cluster.local:9090
      access: proxy
      isDefault: true
 
@@ -501,7 +487,7 @@ notifiers: {}
 ##
 ## `path` must be /var/lib/grafana/dashboards/<provider_name>
 ##
-dashboardProviders: 
+dashboardProviders:
  dashboardproviders.yaml:
    apiVersion: 1
    providers:
@@ -520,7 +506,7 @@ dashboardProviders:
 ##
 ## dashboards per provider, use provider name as key.
 ##
-dashboards: 
+dashboards:
 
   default:
     some-dashboard:
@@ -768,9 +754,6 @@ smtp:
 ## Requires at least Grafana 5 to work and can't be used together with parameters dashboardProviders, datasources and dashboards
 sidecar:
   image:
-    repository: quay.io/kiwigrid/k8s-sidecar
-    tag: 1.15.6
-    sha: ""
   imagePullPolicy: IfNotPresent
   resources: {}
 #   limits:
@@ -901,11 +884,7 @@ imageRenderer:
   replicas: 1
   image:
     # image-renderer Image repository
-    repository: grafana/grafana-image-renderer
-    # image-renderer Image tag
-    tag: latest
-    # image-renderer Image sha (optional)
-    sha: ""
+
     # image-renderer ImagePullPolicy
     pullPolicy: Always
   # extra environment variables

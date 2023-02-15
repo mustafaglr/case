@@ -1,0 +1,38 @@
+server:
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - argocd.kubernetes.local
+
+configs:
+  params:
+    server.insecure: true
+
+controller:
+  nodeSelector:
+    kubernetes.io/hostname: k8s-1
+
+dex:
+  nodeSelector:
+    kubernetes.io/hostname: k8s-1
+
+redis:
+  nodeSelector:
+    kubernetes.io/hostname: k8s-1
+
+server:
+  nodeSelector:
+    kubernetes.io/hostname: k8s-1
+
+repoServer:
+  nodeSelector:
+    kubernetes.io/hostname: k8s-1
+
+applicationSet:
+  nodeSelector:
+    kubernetes.io/hostname: k8s-1
+
+notifications:
+  nodeSelector:
+    kubernetes.io/hostname: k8s-1

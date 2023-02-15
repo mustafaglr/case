@@ -7,10 +7,16 @@
 
 
 - name: Install ingress
-  command: > 
+  command: >
     helm upgrade -i --history-max=1 \
     nginx-ingress \
+    roles/ingress/templates/helm-chart \
     --namespace nginx-ingress \
-    -f ingress-values.yaml \
-    roles/ingress/templates/helm-chart
+    -f roles/ingress/files/ingress-values.yaml
 
+
+- name: Apply K8s resources
+  k8s:
+    definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
+  with_fileglob:
+    - "ing-*.yml"

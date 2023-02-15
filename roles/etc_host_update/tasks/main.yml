@@ -1,0 +1,5 @@
+- name: "Add to host file"
+  lineinfile:
+    path: /etc/hosts
+    line: "172.18.8.103 prometheus.kubernetes.local core.kubernetes.local registry.kubernetes.local jenkins.kubernetes.local argo.kubernetes.local grafana.kubernetes.local "
+    state: present

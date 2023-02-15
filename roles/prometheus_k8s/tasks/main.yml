@@ -18,31 +18,17 @@
   command: helm repo update
 
 - name: Init kube state metrics
-  command: > 
+  command: >
     helm upgrade -i --history-max=1 \
-    kube-state-metrics \
+    kube-state-metrics-local \
     --namespace kube-system \
     prometheus-community/kube-state-metrics
 
-
 - name: Init Prometheus
-  command: > 
+  command: >
     helm upgrade -i --history-max=1 \
     prom \
     --namespace prometheus \
     --version 34.6.0 \
     -f prometheus-values.yml \
     prometheus-community/kube-prometheus-stack
-
-- name: Wait for Prometheus pod to become up for patching
-  k8s_facts:
-    api_version: v1
-    kind: Pod
-    name: prometheus-prom-kube-prometheus-stack-prometheus-0
-    namespace: prometheus
-  until: prom_pod.resources | length > 0
-  register: prom_pod
-  retries: 100
-  delay: 5
-
-
